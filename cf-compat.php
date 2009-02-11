@@ -98,7 +98,7 @@ Author URI: http://crowdfavorite.com
 	 */
 	function cf_get_the_excerpt($excerpt) {
 		$excerpt = trim($excerpt);
-		if((empty($excerpt) || $excerpt != '<br />') && CF_NO_EXCERPT_LENGTH > 0) {
+		if((empty($excerpt) || $excerpt == '<br />') && CF_NO_EXCERPT_LENGTH > 0) {
 			global $post;
 			$excerpt = strip_tags($post->post_content);
 			if(strlen($excerpt) > CF_NO_EXCERPT_LENGTH) {
