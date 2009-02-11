@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Crowd Favorite Compatability
+Plugin Name: CF Compatability
 Plugin URI: http://crowdfavorite.com
 Description:  General compatability functions compiled by Crowd Favorite
 Version: 1.0
