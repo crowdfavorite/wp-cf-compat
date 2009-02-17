@@ -77,6 +77,17 @@ Author URI: http://crowdfavorite.com
 	}
 	
 	/**
+	 * Normalize line endings to a Unix standard
+	 * @param string $string - content to be normalized
+	 * @return string
+	 */
+	function cf_normalize_line_endings($string) {
+		$find = array(chr(13).chr(10),chr(13),"\r\n","\r");
+		$replace = "\n";
+		return str_replace($find,$replace,$string);
+	}
+	
+	/**
 	 * WordPress likes to default to using '<br />' as "empty" content for posts and pages
 	 * The below function will replace '<br />' with a real "empty" string
 	 * @param string $content - the post or page content
