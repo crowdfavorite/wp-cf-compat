@@ -120,7 +120,7 @@ function cf_get_the_excerpt($excerpt) {
 	return $excerpt;
 }
 define('CF_NO_EXCERPT_LENGTH',0);
-add_action('get_the_excerpt','cf_get_the_excerpt');
+//add_action('get_the_excerpt','cf_get_the_excerpt');
 
 /**
  * Shortcode handler to run certain functions inside a shortcode
