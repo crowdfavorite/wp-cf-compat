@@ -307,7 +307,6 @@ if(!function_exists('cf_json_encode')) {
 /**
  * Shows a date range - for auto-updateing the copyright date in a site footer.
  */
-
 if (!function_exists('cf_copyright_date')) {
 	function cf_copyright_date($year) {
 		$output = $year;
@@ -316,5 +315,80 @@ if (!function_exists('cf_copyright_date')) {
 		}
 		print($output);
 	}
+}
+
+/**
+ * return a formatted phone number
+ * Only accounts for formatting a 10 digit phone string/int
+ *
+ * @param string/int $num - number to format
+ * @param string $format - PCRE replacement string
+ * @return string
+ */
+function cf_format_phone($num,$format='($1) $2-$3') {
+        $clean = preg_replace('/[^0-9]/','',$num);
+        return preg_replace('/([\w]{3})([\w]{3})([\w]{4})/',$format,$clean);
+}
+
+/**
+ * Convert an array of data into a plain HTML table
+ * does not variable row length handling, and only handles a 2D array
+ * Args can contain supplementary information to include in the output
+ *	- table_id - DOM id to apply to the table
+ *	- table_class - CSS class to apply to the table
+ *	- tr_class - CSS class to apply to table rows
+ *
+ * @TODO attach a class to empty tds
+ *
+ * @param array $data
+ * @param bool/array $header_row_from - build a header row from first row's values
+ * @param array $args - see above
+ * @return string - HTML
+ */
+function cf_array_to_html_table($data,$header_row_from=false,$args=array()) {
+	$table = '';
+	$header_data = false; 
+	
+	$defaults = array(
+			'table_id' => null,
+			'table_class' => null,
+			'tr_class' => null,
+			//'empty_td_class' => null
+		);
+	extract(array_merge($defaults,$args));
+
+	if($header_row_from == 'first') {
+		$header_data = array_shift($data);
+	}
+	elseif($header_row_from = 'keys') {
+		$header_data = array_keys(current($data));
+	}
+	elseif(is_array($header_row_from)) {
+		// balance header values if they count doesn't match the 2D array item count
+		if(count($header_row_from) != count(current($data))){
+			$difference = count(current($data)) - count($header_row_from);
+			if($difference > 0) {
+				array_merge($header_row_from,array_fill(0,$difference,'&nbsp;'));
+			}
+			else {
+				$header_row_from = array_slice($header_row_from,0,$difference);
+			}
+		}
+		$header_data = $header_row_from;
+	}
+	
+	$table .= '<table'.($table_id != null ? ' id="'.$table_id.'"' : null).($table_class != null ? ' class="'.$table_class.'"' : null).'>';
+	if($header_data) {
+		$table .= '<thead>'.'<tr><th>'.implode('</th><th>',$header_data).'</th></tr>'.'</thead>';
+	}
+	$table .= '<tbody>';
+	foreach($data as $row) {
+		if(!is_array($row)) { continue; } 
+		$table .= '<tr'.($tr_class != null ? ' class="'.$tr_class.'"' : '').'><td>'.implode('</td><td>',$row).'</td></tr>'; 
+	}
+	$table .= '</tbody>'.
+			  '</table>';
+
+	return $table;
 }
 ?>
