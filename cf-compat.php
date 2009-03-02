@@ -152,6 +152,28 @@ function cf_call_func_shortcode($atts) {
 add_shortcode('cf-call-func','cf_call_func_shortcode');
 
 /**
+ * Content handler for shortening the amount of content
+ * Function inputs some content, and if it needs to it shortens it
+ * using the defined length
+ * 
+ * @param string $content - Content to be shortened
+ * @param integer $length - Length of string to be returned
+ * @return string
+ */
+function cf_trim_content($before_content = '',$after_content = '',$content,$length = 250) {
+        $content = str_replace(']]>', ']]&gt;', $content);
+        $content = preg_replace('/<img[^>]*>/','',$content);
+
+        if(strlen($content) > $length) {
+                $content = substr($content, 0, $length);
+                $content = substr($content, 0, strrpos($content, ' '));
+        }
+        $content = $before_content.$content.$after_content;
+        $content = apply_filters('the_content', $content);
+        return $content;
+}
+
+/**
  * Sort an array by a key within the array_items
  * Items can be arrays or objects, but must all be the same type
  *
