@@ -413,4 +413,16 @@ function cf_array_to_html_table($data,$header_row_from=false,$args=array()) {
 
 	return $table;
 }
+
+/**
+ * Function for getting the id of a page by its slug
+ *
+ * @param string $page_name - Slug of the page
+ * @return $page->ID - ID of the page slug passed in
+ */
+function cf_get_page_by_slug($page_name){
+	global $wpdb;
+	$page = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name = '".$page_name."'");
+	return $page;
+}
 ?>
