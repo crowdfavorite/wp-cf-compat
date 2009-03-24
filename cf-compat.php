@@ -425,4 +425,29 @@ function cf_get_page_by_slug($page_name){
 	$page = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name = '".$page_name."'");
 	return $page;
 }
+
+/**
+ * functionality for showing all the wordpress queries in page footer
+ */
+if(defined('CF_QUERY_DEBUG') && CF_QUERY_DEBUG) {
+	define('SAVEQUERIES',false);
+	add_action('wp_footer','cf_saved_queries_output');
+	add_action('admin_footer','cf_saved_queries_output');
+	
+	/**
+	 * Output all the page's queries at the bottom of the page
+	 * Use define('CF_QUERY_DEBUG',true) to activate
+	 */
+	function cf_saved_queries_output() {
+		global $wpdb;
+		if(defined('SAVEQUERIES') && SAVEQUERIES) {
+			echo '<ul style="text-align: left; font-size: 12px; list-style: disc outside; padding-left: 15px; margin-left: 10px">';
+			foreach($wpdb->queries as $query) {
+				echo '<li style="margin-bottom: 10px;">'.$query[0].'</li>';
+			}
+			echo '</ul>';
+		}
+	}
+}
+
 ?>
