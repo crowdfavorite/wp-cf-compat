@@ -123,6 +123,26 @@ define('CF_NO_EXCERPT_LENGTH',0);
 //add_action('get_the_excerpt','cf_get_the_excerpt');
 
 /**
+ * Function for trimming text.  This function takes text and length as an input, and returns
+ * the text truncated to the nearest word if the length of the text is longer than the length
+ *
+ * @param string $text - (required) Text to truncate
+ * @param string $length - Length of the truncated string to return
+ * @return $text - Truncated text being returned
+ */
+function cf_trim_text($text, $length = 250) {
+	// If the text field is empty, there is no need to make it smaller
+	if (empty($text)) { return $text; }
+	
+	if (strlen($text) > $length) {
+		$text = substr($text, 0, $length);
+		$text = substr($text, 0, strrpos($text, ' '));
+	}
+	return $text;
+}
+
+
+/**
  * Shortcode handler to run certain functions inside a shortcode
  * To add more available functions add the function name to the functions_allowed array
  *
