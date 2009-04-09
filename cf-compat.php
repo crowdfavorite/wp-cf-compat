@@ -159,7 +159,8 @@ function cf_call_func_shortcode($atts) {
 							'get_bloginfo',
 							'bloginfo',
 							'my_test_func',
-							'get_permalink'
+							'get_permalink',
+							'get_category_link'
 							);
 	if(!in_array($type,$functions_allowed)) { return null; }
 	
