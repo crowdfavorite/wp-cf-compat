@@ -8,6 +8,9 @@ Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */
 
+load_plugin_textdomain('cf-compat');
+
+
 /**
  * Tell the world we're here
  */
@@ -469,6 +472,247 @@ if(defined('CF_QUERY_DEBUG') && CF_QUERY_DEBUG) {
 			echo '</ul>';
 		}
 	}
+}
+
+/** 
+ * 
+ * CF Compat Option Export Functions
+ * 
+ */
+
+function cf_menu_items() {
+	if (current_user_can('manage_options')) {
+		add_management_page(
+			__('CF Site Options'),
+			__('CF Site Options'),
+			10,
+			basename(__FILE__),
+			'cf_site_options'
+		);
+	}
+}
+add_action('admin_menu','cf_menu_items');
+
+function cf_request_handler() {
+	if (current_user_can('manage_options')) {
+		$blogurl = '';
+		if (is_ssl()) {
+			$blogurl = str_replace('http://','https://',get_bloginfo('wpurl'));
+		}
+		else {
+			$blogurl = get_bloginfo('wpurl');
+		}				
+		if (isset($_POST['cf_action']) && $_POST['cf_action'] != '') {
+			switch ($_POST['cf_action']) {
+				case 'cf_import_options':
+					if (isset($_POST['cf_import']) && !empty($_POST['cf_import'])) {
+						cf_import_process(maybe_unserialize(stripslashes($_POST['cf_import'])));
+					}
+					break;
+			}
+		}
+	}
+}
+add_action('init', 'cf_request_handler');
+
+function cf_import_process($options) {
+	foreach ($options as $key => $option) {
+		$option_name = $option['option_name'];
+		$option_value = maybe_unserialize($option['option_value']);
+		update_option($option_name, $option_value);
+	}
+}
+
+function cf_site_options_head() {
+	?>
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			jQuery("#cf-export-checkall").click(function() {
+				var checked_status = this.checked;
+				jQuery("input[@type=checkbox]").each(function() {
+					this.checked = checked_status;
+				});
+			});	
+		});
+	</script>
+	<?php
+}
+add_action('admin_head','cf_site_options_head');
+
+function cf_site_options_nav($page = '') {
+	$blogurl = '';
+	if (is_ssl()) {
+		$blogurl = str_replace('http://','https://',get_bloginfo('wpurl'));
+	}
+	else {
+		$blogurl = get_bloginfo('wpurl');
+	}		
+	
+	switch ($page) {
+		case 'import':
+			$import_text = ' class="current"';
+			break;
+		case 'export':
+		case 'export_list':
+			$export_text = ' class="current"';
+			break;
+		default:
+			$import_text = ' class="current"';
+			break;
+	}
+	
+	$nav .= '
+		<ul class="subsubsub">
+			<li>
+				<a href="'.trailingslashit($blogurl).'wp-admin/tools.php?page=cf-compat.php&cf_page=import"'.$import_text.'>'.__('Import','cf-compat').'</a> |
+			</li>
+			<li>
+				<a href="'.trailingslashit($blogurl).'wp-admin/tools.php?page=cf-compat.php&cf_page=export"'.$export_text.'>'.__('Export','cf-compat').'</a>
+			</li>
+		</ul>
+	';
+	return $nav;
+}
+
+function cf_site_options() {
+	if (isset($_POST['cf_action']) && $_POST['cf_action'] == 'cf_export_options') {
+		$page = 'export_list';
+	}
+	else if (isset($_GET['cf_page'])) {
+		$page = $_GET['cf_page'];
+	}
+	print('
+	<div class="wrap">
+	');
+	screen_icon();
+	print('
+		<h2>CF Import/Export Site Options</h2>
+		'.cf_site_options_nav($page));
+		if (isset($page)) {
+			switch ($page) {
+				case 'import':
+					cf_import_options();
+					break;
+				case 'export':
+					cf_export_options();
+					break;
+				case 'export_list':
+					cf_export_options_list();
+					break;
+			}
+		}
+		else {
+			cf_import_options();
+		}
+	print('
+	</div>
+	');
+}
+
+function cf_import_options() {
+	print('
+		<form action="" method="post" id="cf-import-options">
+			<table class="widefat">
+				<thead>
+					<tr>
+						<th scope="col">'.__('Enter Data from Export', 'cf-compat').'</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea name="cf_import" rows="15" style="width:100%;"></textarea>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="submit" style="border-top: none;">
+				<input type="hidden" name="cf_action" value="cf_import_options" />
+				<input type="submit" name="submit" id="cf-submit" class="button-primary button" value="'.__('Import Options', 'cf-compat').'" />
+			</p>
+		</form>
+	');
+}
+
+function cf_export_options() {
+	global $wpdb;
+	
+	$query = "SELECT * FROM $wpdb->options";
+	$results = $wpdb->get_results($query);
+	
+	print('
+		<form action="" method="post" id="cf-export-options">		
+			<table class="widefat post fixed">
+				<thead>
+					<tr>
+						<th scope="col" class="manage-column column-cb check-column"><input type="checkbox" id="cf-export-checkall" /></th>
+						<th scope="col" class="manage-column column-title" width="300px">'.__('Option Name', 'cf-compat').'</th>
+						<th scope="col" class="manage-column column-title">'.__('Value', 'cf-compat').'</th>
+					</tr>
+				</thead>
+				<tbody>
+	');
+	foreach ($results as $result) {
+		print('
+					<tr>
+						<td style="text-align: center;">
+							<input type="checkbox" name="cfexport[]" value="'.$result->option_id.'" />
+						</td>
+						<td>
+							'.$result->option_name.'
+						</td>
+						<td>
+							<div style="width:600px;">
+								'.$result->option_value.'
+							</div>
+						</td>
+					</tr>
+		');
+	}
+	print('
+				</tbody>
+			</table>
+			<p class="submit" style="border-top: none;">
+				<input type="hidden" name="cf_action" value="cf_export_options" />
+				<input type="submit" name="submit" id="cf-submit" class="button-primary button" value="'.__('Export Selected Options', 'cf-compat').'" />
+			</p>
+		</form>
+	');
+}
+
+function cf_export_options_list() {
+	if (!isset($_POST['cfexport']) || empty($_POST['cfexport'])) { return false; }
+	global $wpdb;
+	
+	$options = $_POST['cfexport'];
+	$export = array();
+	foreach ($options as $option_id) {
+		$query = "SELECT * FROM $wpdb->options WHERE option_id LIKE $option_id";
+		$results = $wpdb->get_results($query);
+		$export[$option_id] = array(
+			'option_name' => $results[0]->option_name,
+			'option_value' => $results[0]->option_value
+		);
+	}
+	print('
+		<table class="widefat">
+			<thead>
+				<tr>
+					<th scope="col">'.__('Export Data', 'cf-compat').'</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						'.__('Copy the date in this text area, and paste it into the import text area of the blog you need these options for.','cf-compat').'
+						<textarea name="cf_export" rows="15" style="width:100%;">');
+						print_r(serialize($export));
+						print('</textarea>
+					</td>
+				</tr>
+			</tbody>
+		</table>		
+	');
 }
 
 ?>
