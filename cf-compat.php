@@ -506,7 +506,7 @@ function cf_request_handler() {
 			switch ($_POST['cf_action']) {
 				case 'cf_import_options':
 					if (isset($_POST['cf_import']) && !empty($_POST['cf_import'])) {
-						cf_import_process(maybe_unserialize(stripslashes($_POST['cf_import'])));
+						cf_import_process(json_decode(stripslashes($_POST['cf_import']),true));
 					}
 					break;
 			}
@@ -518,7 +518,7 @@ add_action('init', 'cf_request_handler');
 function cf_import_process($options) {
 	foreach ($options as $key => $option) {
 		$option_name = $option['option_name'];
-		$option_value = maybe_unserialize($option['option_value']);
+		$option_value = $option['option_value'];
 		update_option($option_name, $option_value);
 	}
 }
@@ -691,7 +691,7 @@ function cf_export_options_list() {
 		$results = $wpdb->get_results($query);
 		$export[$option_id] = array(
 			'option_name' => $results[0]->option_name,
-			'option_value' => $results[0]->option_value
+			'option_value' => maybe_unserialize($results[0]->option_value)
 		);
 	}
 	print('
@@ -706,7 +706,7 @@ function cf_export_options_list() {
 					<td>
 						'.__('Copy the date in this text area, and paste it into the import text area of the blog you need these options for.','cf-compat').'
 						<textarea name="cf_export" rows="15" style="width:100%;">');
-						print_r(serialize($export));
+						print(json_encode($export));
 						print('</textarea>
 					</td>
 				</tr>
