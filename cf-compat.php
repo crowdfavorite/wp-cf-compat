@@ -29,6 +29,8 @@ if(!defined('WP_PLUGIN_URL')) {
 	define('WP_PLUGIN_URL',WP_CONTENT_URL. '/plugins');
 }
 
+include('services_json.class.php');
+
 /**
  * make sure we have an is_admin function
  */ 
@@ -506,7 +508,15 @@ function cf_request_handler() {
 			switch ($_POST['cf_action']) {
 				case 'cf_import_options':
 					if (isset($_POST['cf_import']) && !empty($_POST['cf_import'])) {
-						cf_import_process(json_decode(stripslashes($_POST['cf_import']),true));
+						$import = stripslashes($_POST['cf_import']);
+						if (!function_exists('json_encode')) {
+							$json = new Services_JSON();
+							$import = $json->encode($import);
+						}
+						else {
+							$import = json_encode($import);
+						}
+						cf_import_process($import,true));
 					}
 					break;
 			}
@@ -694,6 +704,15 @@ function cf_export_options_list() {
 			'option_value' => maybe_unserialize($results[0]->option_value)
 		);
 	}
+	
+	if (!function_exists('json_encode')) {
+		$json = new Services_JSON();
+		$export = $json->encode($export);
+	}
+	else {
+		$export = json_encode($export);
+	}
+	
 	print('
 		<table class="widefat">
 			<thead>
@@ -705,9 +724,7 @@ function cf_export_options_list() {
 				<tr>
 					<td>
 						'.__('Copy the date in this text area, and paste it into the import text area of the blog you need these options for.','cf-compat').'
-						<textarea name="cf_export" rows="15" style="width:100%;">');
-						print(json_encode($export));
-						print('</textarea>
+						<textarea name="cf_export" rows="15" style="width:100%;">'.$export.'</textarea>
 					</td>
 				</tr>
 			</tbody>
