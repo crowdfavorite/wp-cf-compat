@@ -9,7 +9,7 @@ Author URI: http://crowdfavorite.com
 */
 
 load_plugin_textdomain('cf-compat');
-
+// ini_set('display_errors', '1'); ini_set('error_reporting', E_ALL);
 
 /**
  * Tell the world we're here
@@ -28,8 +28,6 @@ if(!defined('WP_CONTENT_DIR')) {
 if(!defined('WP_PLUGIN_URL')) {
 	define('WP_PLUGIN_URL',WP_CONTENT_URL. '/plugins');
 }
-
-include('services_json.class.php');
 
 /**
  * make sure we have an is_admin function
@@ -508,14 +506,7 @@ function cf_request_handler() {
 			switch ($_POST['cf_action']) {
 				case 'cf_import_options':
 					if (isset($_POST['cf_import']) && !empty($_POST['cf_import'])) {
-						$import = stripslashes($_POST['cf_import']);
-						if (!function_exists('json_encode')) {
-							$json = new Services_JSON();
-							$import = $json->encode($import);
-						}
-						else {
-							$import = json_encode($import);
-						}
+						$import = unserialize(urldecode($_POST['cf_import']));
 						cf_import_process($import,true);
 					}
 					break;
@@ -527,9 +518,17 @@ add_action('init', 'cf_request_handler');
 
 function cf_import_process($options) {
 	foreach ($options as $key => $option) {
-		$option_name = $option['option_name'];
-		$option_value = $option['option_value'];
-		update_option($option_name, $option_value);
+		$imported = false;
+		if (is_a($option,'stdClass')) {
+			$option_name = $option->option_name;
+			$option_value = $option->option_value;
+		}
+		else {
+			$option_name = $option['option_name'];
+			$option_value = $option['option_value'];
+		}
+		$imported = update_option($option_name, $option_value);
+		print('Option Name: '.$option_name.' || Imported: '.$imported.'<br />');
 	}
 }
 
@@ -699,19 +698,13 @@ function cf_export_options_list() {
 	foreach ($options as $option_id) {
 		$query = "SELECT * FROM $wpdb->options WHERE option_id LIKE $option_id";
 		$results = $wpdb->get_results($query);
-		$export[$option_id] = array(
+		$export[] = array(
 			'option_name' => $results[0]->option_name,
 			'option_value' => maybe_unserialize($results[0]->option_value)
 		);
+		//print_r(unserialize($results[0]->option_value));
 	}
-	
-	if (!function_exists('json_encode')) {
-		$json = new Services_JSON();
-		$export = $json->encode($export);
-	}
-	else {
-		$export = json_encode($export);
-	}
+	$export = urlencode(serialize($export));
 	
 	print('
 		<table class="widefat">
