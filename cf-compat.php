@@ -516,7 +516,7 @@ function cf_request_handler() {
 						else {
 							$import = json_encode($import);
 						}
-						cf_import_process($import,true));
+						cf_import_process($import,true);
 					}
 					break;
 			}
