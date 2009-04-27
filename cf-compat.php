@@ -192,10 +192,53 @@ function cf_trim_content($before_content = '',$after_content = '',$content,$leng
                 $content = substr($content, 0, $length);
                 $content = substr($content, 0, strrpos($content, ' '));
         }
+		$content = cf_close_opened_tags($content);
         $content = $before_content.$content.$after_content;
         $content = apply_filters('the_content', $content);
         return $content;
 }
+
+/**
+ * Function to close any opened tags in a string
+ * Makes no attempt to put them in the proper place, just makes sure that everything closes
+ *
+ * @param string $string 
+ * @return string
+ */
+function cf_close_opened_tags($string) {
+	preg_match_all('/<(\w+)/',$string,$open_tags);
+	preg_match_all('/<\/(\w+)/',$string,$close_tags);
+
+	// if open & close match then get out quickly
+	if(count($open_tags[1]) == count($close_tags[1])) { 
+		return $string;
+	}
+
+	// log found open tags
+	$tags = array();
+	foreach($open_tags[1] as $found) {
+		if(!isset($tags[$found])) {
+			$tags[$found] = 0;
+		}
+		$tags[$found]++;
+	}
+
+	// process found close tags
+	foreach($close_tags[1] as $found) {
+		$tags[$found]--;
+		if($tags[$found] == 0) { unset($tags[$found]); }
+	}
+
+	// feeble attempt to get a semblance of order
+	$tags = array_reverse($tags,true);
+	foreach($tags as $tagname => $tag_count) {
+		if($tag_count) {
+			$string .= '</'.$tagname.'>';
+		}
+	}
+	return $string;
+}
+
 
 /**
  * Sort an array by a key within the array_items
