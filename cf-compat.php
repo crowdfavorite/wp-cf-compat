@@ -835,6 +835,6 @@ function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4
 	}
 	
 	// actual date string if farther than 4 weeks ago
-	return 'on ' . date($format, strtotime($date));
+	return 'on ' . mysql2date($format, strtotime($date));
 }
 ?>
