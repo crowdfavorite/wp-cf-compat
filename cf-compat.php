@@ -775,12 +775,12 @@ function cf_export_options_list() {
 }
 
 /**
- * Simple pluralizer for the date entry
+ * Simple pluralizer for the date entry of cf_relative_time_ago
  *
  * @param int $num 
  * @return string
  */
-function cf_plural($num) {
+function cf_count_plural($num) {
 	return $num != 1 ? 's' : null;
 }
 
@@ -807,31 +807,31 @@ function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4
 	// seconds
 	$diff = time()-$date;
 	if ($diff < 60){ 
-		return $pre.$diff.' second'.cf_plural($diff).$post; 
+		return $pre.$diff.' second'.cf_count_plural($diff).$post; 
 	}
 	
 	// minutes
 	$diff = round($diff/60);
 	if ($diff < 60) { 
-		return $pre.$diff.' minute'.cf_plural($diff).$post; 
+		return $pre.$diff.' minute'.cf_count_plural($diff).$post; 
 	}
 	
 	// hours
 	$diff = round($diff/60);
 	if ($diff < 24) { 
-		return $pre.$diff.' hour'.cf_plural($diff).$post; 
+		return $pre.$diff.' hour'.cf_count_plural($diff).$post; 
 	}
 	
 	// days
 	$diff = round($diff/24);
 	if ($diff < 7) { 
-		return $pre.$diff.' day'.cf_plural($diff).$post; 
+		return $pre.$diff.' day'.cf_count_plural($diff).$post; 
 	}
 	
 	// weeks
 	$diff = round($diff/7);
 	if ($diff <= $full_date_cutoff) { 
-		return $pre.$diff.' week'.cf_plural($diff).$post; 
+		return $pre.$diff.' week'.cf_count_plural($diff).$post; 
 	}
 	
 	// actual date string if farther than 4 weeks ago
