@@ -799,7 +799,7 @@ function cf_count_plural($num) {
 function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4,$format='F j, Y') {
 	$pre .= ' ';
 	$post = ' '.$post;
-	
+
 	if(!is_numeric($date)) { 
 		$date = strtotime($date); 
 	}
@@ -833,8 +833,8 @@ function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4
 	if ($diff <= $full_date_cutoff) { 
 		return $pre.$diff.' week'.cf_count_plural($diff).$post; 
 	}
-	
+
 	// actual date string if farther than 4 weeks ago
-	return 'on ' . mysql2date($format, strtotime($date));
+	return 'on ' . mysql2date($format, date('Y-m-d H:i:s', $date));
 }
 ?>
