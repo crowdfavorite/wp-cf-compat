@@ -275,8 +275,8 @@ function cf_sort_by_key($data,$sort_key,$ascending=true) {
  */
 function cf_non_admin_redirect($capability = 'edit_pages') {
 	$below_threshold = (is_admin() && !current_user_can($capability));
-	$below_threshold = apply_filters('cf_set_threshold',$below_threshold);
-	if($below_threshold) {
+	$below_threshold = apply_filters('cf_non_admin_threshold', $below_threshold);
+	if ($below_threshold) {
 		$requested_page = strtolower(basename($_SERVER['SCRIPT_NAME']));
 		/* Adding Filter for allowing non-editor-level users access
 		* 	to specific pages */
