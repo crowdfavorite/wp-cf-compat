@@ -281,8 +281,8 @@ function cf_non_admin_redirect() {
 		if (!in_array($requested_page, apply_filters('cf_non_admin_allowed_pages', array()))) {
 			/* Adding filter of where to dump users upon redirect */
 			wp_redirect(apply_filters('cf_non_admin_redirect_to', get_bloginfo('url')));
+			exit;
 		}
-		exit;
 	}
 }
 
