@@ -273,16 +273,18 @@ function cf_sort_by_key($data,$sort_key,$ascending=true) {
  * force redirect any attempts to access the admin pages
  * add this function to an init handler to enforce
  */
-function cf_non_admin_redirect() {
-	if(is_admin() && !current_user_can('edit_pages')) {
+function cf_non_admin_redirect($capability = 'edit_pages') {
+	$below_threshold = (is_admin() && !current_user_can($capability));
+	$below_threshold = apply_filters('cf_set_threshold',$below_threshold);
+	if($below_threshold) {
 		$requested_page = strtolower(basename($_SERVER['SCRIPT_NAME']));
 		/* Adding Filter for allowing non-editor-level users access
 		* 	to specific pages */
 		if (!in_array($requested_page, apply_filters('cf_non_admin_allowed_pages', array()))) {
 			/* Adding filter of where to dump users upon redirect */
 			wp_redirect(apply_filters('cf_non_admin_redirect_to', get_bloginfo('url')));
+			exit;
 		}
-		exit;
 	}
 }
 
