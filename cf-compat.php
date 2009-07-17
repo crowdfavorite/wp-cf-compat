@@ -187,6 +187,7 @@ add_shortcode('cf-call-func','cf_call_func_shortcode');
 function cf_trim_content($before_content = '',$after_content = '',$content,$length = 250) {
         $content = str_replace(']]>', ']]&gt;', $content);
         $content = preg_replace('/<img[^>]*>/','',$content);
+		$content = strip_shortcodes($content);
 
         if(strlen($content) > $length) {
                 $content = substr($content, 0, $length);
