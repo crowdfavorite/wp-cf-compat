@@ -185,18 +185,19 @@ add_shortcode('cf-call-func','cf_call_func_shortcode');
  * @return string
  */
 function cf_trim_content($before_content = '',$after_content = '',$content,$length = 250) {
-        $content = str_replace(']]>', ']]&gt;', $content);
-        $content = preg_replace('/<img[^>]*>/','',$content);
-		$content = strip_shortcodes($content);
+	$content = str_replace(']]>', ']]&gt;', $content);
+	$content = preg_replace('/<img[^>]*>/','',$content);
+	$content = preg_replace('/\[(.*?)\]/','',$content);
+	$content = strip_tags($content);
 
-        if(strlen($content) > $length) {
-                $content = substr($content, 0, $length);
-                $content = substr($content, 0, strrpos($content, ' '));
-        }
-		$content = cf_close_opened_tags($content);
-        $content = $before_content.$content.$after_content;
-        $content = apply_filters('the_content', $content);
-        return $content;
+	if(strlen($content) > $length) {
+		$content = substr($content, 0, $length);
+		$content = substr($content, 0, strrpos($content, ' '));
+	}
+	$content = cf_close_opened_tags($content);
+	$content = $before_content.$content.$after_content;
+	$content = apply_filters('the_content', $content);
+	return $content;
 }
 
 /**
