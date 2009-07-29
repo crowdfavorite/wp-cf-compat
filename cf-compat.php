@@ -201,6 +201,31 @@ function cf_trim_content($before_content = '',$after_content = '',$content,$leng
 }
 
 /**
+ * Content handler for shortening the amount of content
+ * Function inputs some content, and if it needs to it shortens it
+ * using the defined length.  This function will keep shortcodes in place.
+ * 
+ * @param string $content - Content to be shortened
+ * @param integer $length - Length of string to be returned
+ * @return string
+ */
+function cf_trim_content_with_shortcodes($before_content = '',$after_content = '',$content,$length = 250) {
+	$content = str_replace(']]>', ']]&gt;', $content);
+	$content = preg_replace('/<img[^>]*>/','',$content);
+	// $content = preg_replace('/\[(.*?)\]/','',$content);
+	// $content = strip_tags($content);
+
+	if(strlen($content) > $length) {
+		$content = substr($content, 0, $length);
+		$content = substr($content, 0, strrpos($content, ' '));
+	}
+	$content = cf_close_opened_tags($content);
+	$content = $before_content.$content.$after_content;
+	$content = apply_filters('the_content', $content);
+	return $content;
+}
+
+/**
  * Function to close any opened tags in a string
  * Makes no attempt to put them in the proper place, just makes sure that everything closes
  *
