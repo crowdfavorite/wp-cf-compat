@@ -133,15 +133,17 @@ define('CF_NO_EXCERPT_LENGTH',0);
  * @param string $length - Length of the truncated string to return
  * @return $text - Truncated text being returned
  */
-function cf_trim_text($text, $length = 250) {
-	// If the text field is empty, there is no need to make it smaller
-	if (empty($text)) { return $text; }
+if (!function_exists('cf_trim_text')) {
+	function cf_trim_text($text, $length = 250, $before = '', $after = '') {
+		// If the text field is empty, there is no need to make it smaller
+		if (empty($text)) { return $text; }
 	
-	if (strlen($text) > $length) {
-		$text = substr($text, 0, $length);
-		$text = substr($text, 0, strrpos($text, ' '));
+		if (strlen($text) > $length) {
+			$text = substr($text, 0, $length);
+			$text = substr($text, 0, strrpos($text, ' '));
+		}
+		return $before.$text.$after;
 	}
-	return $text;
 }
 
 
