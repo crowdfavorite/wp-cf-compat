@@ -6,11 +6,10 @@
 	- Added a $before and $after parameter to function. (mostly so we can add elipsis if necessary)
 
 ## 1.4
-
-cf_non_admin_redirect received the following changes:
-- receives an argument $capability that defaults to 'edit_pages'
-- $below_threshold - true if the page is an admin page and the current user does not have $capability (filterable)
-- main if statement checks the value $below_threshold, redirecting if true.
+- function `cf_non_admin_redirect`:
+	- receives an argument $capability that defaults to 'edit_pages'
+	- $below_threshold - true if the page is an admin page and the current user does not have $capability (filterable)
+	- main if statement checks the value $below_threshold, redirecting if true.
 
 ## 1.3
 
