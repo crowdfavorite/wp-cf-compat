@@ -3,10 +3,9 @@
 ## 1.5
 - added filter for the constant definition of `CF_NO_EXCERPT_LENGTH`, so we don't have to hack the plugin to change it.
 
-
 ## 1.4
 
-cf_non_admin_redirect recived the following changes:
+cf_non_admin_redirect received the following changes:
 - receives an argument $capability that defaults to 'edit_pages'
 - $below_threshold - true if the page is an admin page and the current user does not have $capability (filterable)
 - main if statement checks the value $below_threshold, redirecting if true.
