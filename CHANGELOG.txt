@@ -1,5 +1,9 @@
 # CF Compat Change Log
 
+## 1.5
+- added filter for the constant definition of `CF_NO_EXCERPT_LENGTH`, so we don't have to hack the plugin to change it.
+
+
 ## 1.4
 
 cf_non_admin_redirect recived the following changes:

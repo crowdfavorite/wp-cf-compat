@@ -3,7 +3,7 @@
 Plugin Name: CF Compatability
 Plugin URI: http://crowdfavorite.com
 Description:  General compatability functions compiled by Crowd Favorite
-Version: 1.4
+Version: 1.5
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */
@@ -122,7 +122,7 @@ function cf_get_the_excerpt($excerpt) {
 	}
 	return $excerpt;
 }
-define('CF_NO_EXCERPT_LENGTH',0);
+define('CF_NO_EXCERPT_LENGTH', apply_filters('cf_no_excerpt_length', 0));
 //add_action('get_the_excerpt','cf_get_the_excerpt');
 
 /**
