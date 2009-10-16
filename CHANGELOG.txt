@@ -2,6 +2,8 @@
 
 ## 1.5
 - added filter for the constant definition of `CF_NO_EXCERPT_LENGTH`, so we don't have to hack the plugin to change it.
+- function `cf_trim_text`:
+	- Added a $before and $after parameter to function. (mostly so we can add elipsis if necessary)
 
 ## 1.4
 
