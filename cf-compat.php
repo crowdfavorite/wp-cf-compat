@@ -122,7 +122,8 @@ function cf_get_the_excerpt($excerpt) {
 	}
 	return $excerpt;
 }
-define('CF_NO_EXCERPT_LENGTH', apply_filters('cf_no_excerpt_length', 0));
+/* Have to throw our define at init, so there's no race-condition with plugins loading after defined */
+add_action('init', create_function("", "define('CF_NO_EXCERPT_LENGTH', apply_filters('cf_no_excerpt_length', 0));"));
 //add_action('get_the_excerpt','cf_get_the_excerpt');
 
 /**
