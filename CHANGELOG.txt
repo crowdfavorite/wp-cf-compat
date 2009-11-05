@@ -4,6 +4,13 @@
 - added filter for the constant definition of `CF_NO_EXCERPT_LENGTH`, so we don't have to hack the plugin to change it.
 - function `cf_trim_text`:
 	- Added a $before and $after parameter to function. (mostly so we can add elipsis if necessary)
+- function `cf_trim_content`:
+	- stripping tags from content
+	- Adding reg_ex: `preg_replace('/\[(.*?)\]/','',$content)`
+- function `cf_tiny_mce`:
+	- Adding tiny_mce functionality for text areas outside of post/page edit screens
+- function `cf_trim_content_with_shortcodes`:
+	- Content handler for shortening the amount of content
 
 ## 1.4
 - function `cf_non_admin_redirect`:
