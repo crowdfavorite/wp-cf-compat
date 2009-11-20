@@ -534,11 +534,12 @@ function cf_get_page_by_slug($page_name){
 /**
  * functionality for showing all the wordpress queries in page footer
  */
+// uncomment the next two lines to do query debugging
+// define('SAVEQUERIES',false);
+// define('CF_QUERY_DEBUG',false)
 if(defined('CF_QUERY_DEBUG') && CF_QUERY_DEBUG) {
-	define('SAVEQUERIES',false);
 	add_action('wp_footer','cf_saved_queries_output');
 	add_action('admin_footer','cf_saved_queries_output');
-	
 	/**
 	 * Output all the page's queries at the bottom of the page
 	 * Use define('CF_QUERY_DEBUG',true) to activate
