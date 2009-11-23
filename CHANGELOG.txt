@@ -1,5 +1,8 @@
 # CF Compat Change Log
 
+## 1.5.1
+- made query logging easier to toggle
+
 ## 1.5
 - added filter for the constant definition of `CF_NO_EXCERPT_LENGTH`, so we don't have to hack the plugin to change it.
 - function `cf_trim_text`:
