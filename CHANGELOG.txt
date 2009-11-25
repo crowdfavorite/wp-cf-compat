@@ -3,7 +3,7 @@
 ## 1.5.1
 - made query logging easier to toggle
 - function `cf_trim_text`:
-	- just returning the $text if the incoming text is shorter than the $length param.
+	- Returning the $text if the incoming text is shorter than the $length param.
 
 ## 1.5
 - added filter for the constant definition of `CF_NO_EXCERPT_LENGTH`, so we don't have to hack the plugin to change it.
