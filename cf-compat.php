@@ -136,8 +136,8 @@ add_action('init', create_function("", "define('CF_NO_EXCERPT_LENGTH', apply_fil
  */
 if (!function_exists('cf_trim_text')) {
 	function cf_trim_text($text, $length = 250, $before = '', $after = '') {
-		// If the text field is empty, there is no need to make it smaller
-		if (empty($text)) { return $text; }
+		// If the text field is empty or is shorter than the $length, there is no need to make it smaller
+		if (empty($text) || strlen($text) <= $length) { return $text; }
 	
 		if (strlen($text) > $length) {
 			$text = substr($text, 0, $length);
