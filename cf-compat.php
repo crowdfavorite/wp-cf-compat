@@ -303,7 +303,7 @@ function cf_sort_by_key($data,$sort_key,$ascending=true) {
  * force redirect any attempts to access the admin pages
  * add this function to an init handler to enforce
  */
-function cf_non_admin_redirect($capability = 'edit_pages') {
+function cf_non_admin_redirect($capability = 'edit_posts') {
 	$below_threshold = (is_admin() && !current_user_can($capability));
 	$below_threshold = apply_filters('cf_non_admin_threshold', $below_threshold);
 	if ($below_threshold) {
