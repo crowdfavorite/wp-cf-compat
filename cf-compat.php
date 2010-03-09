@@ -3,7 +3,7 @@
 Plugin Name: CF Compatability
 Plugin URI: http://crowdfavorite.com
 Description:  General compatability functions compiled by Crowd Favorite
-Version: 1.5.2
+Version: 1.5.2.1
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */
@@ -308,7 +308,7 @@ function cf_non_admin_redirect($capability = 'edit_posts') {
 	$below_threshold = apply_filters('cf_non_admin_threshold', $below_threshold);
 	// if the user has the right capabilities, or this is the flash uploader,
 	// let it thorugh
-	if (!$below_threshold || strpos($_SERVER['REQUEST_URI'], 'async-upload.php') !== FALSE) {
+	if (!$below_threshold || basename($_SERVER['SCRIPT_NAME']) == 'async-upload.php') {
 		return true;
 	}
 	else {
