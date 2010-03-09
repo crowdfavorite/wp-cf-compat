@@ -3,7 +3,7 @@
 Plugin Name: CF Compatability
 Plugin URI: http://crowdfavorite.com
 Description:  General compatability functions compiled by Crowd Favorite
-Version: 1.5.1
+Version: 1.5.2
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */
