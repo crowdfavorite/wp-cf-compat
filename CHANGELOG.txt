@@ -1,5 +1,8 @@
 # CF Compat Change Log
 
+## 1.5.2
+- Added a check to the cf_non_admin_redirect to make sure that the async-upload functionality (used by the flash uploader) is not redirected.
+
 ## 1.5.1
 - made query logging easier to toggle
 - function `cf_trim_text`:

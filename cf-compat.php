@@ -306,10 +306,15 @@ function cf_sort_by_key($data,$sort_key,$ascending=true) {
 function cf_non_admin_redirect($capability = 'edit_posts') {
 	$below_threshold = (is_admin() && !current_user_can($capability));
 	$below_threshold = apply_filters('cf_non_admin_threshold', $below_threshold);
-	if ($below_threshold) {
+	// if the user has the right capabilities, or this is the flash uploader,
+	// let it thorugh
+	if (!$below_threshold || strpos($_SERVER['REQUEST_URI'], 'async-upload.php') !== FALSE) {
+		return true;
+	}
+	else {
 		$requested_page = strtolower(basename($_SERVER['SCRIPT_NAME']));
-		/* Adding Filter for allowing non-editor-level users access
-		* 	to specific pages */
+		//Adding Filter for allowing non-editor-level users access
+		//to specific pages
 		if (!in_array($requested_page, apply_filters('cf_non_admin_allowed_pages', array()))) {
 			/* Adding filter of where to dump users upon redirect */
 			wp_redirect(apply_filters('cf_non_admin_redirect_to', get_bloginfo('url')));
