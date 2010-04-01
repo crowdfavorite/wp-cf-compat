@@ -1,5 +1,8 @@
 # CF Compat Change Log
 
+## 1.5.2.2 (trunk)
+- Make the `cf_trim_text` multi-byte aware. 
+
 ## 1.5.2.1
 - made the check for async-upload more robust as well as more loosely coupled to specific server types.
 

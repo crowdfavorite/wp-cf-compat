@@ -3,7 +3,7 @@
 Plugin Name: CF Compatability
 Plugin URI: http://crowdfavorite.com
 Description:  General compatability functions compiled by Crowd Favorite
-Version: 1.5.2.1
+Version: 1.5.2.2
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */
@@ -137,11 +137,13 @@ add_action('init', create_function("", "define('CF_NO_EXCERPT_LENGTH', apply_fil
 if (!function_exists('cf_trim_text')) {
 	function cf_trim_text($text, $length = 250, $before = '', $after = '') {
 		// If the text field is empty or is shorter than the $length, there is no need to make it smaller
-		if (empty($text) || strlen($text) <= $length) { return $text; }
-	
-		if (strlen($text) > $length) {
-			$text = substr($text, 0, $length);
-			$text = substr($text, 0, strrpos($text, ' '));
+		if (empty($text) || mb_strlen($text) <= $length) { return $text; }
+
+		if (mb_strlen($text) > $length) {
+			$text = mb_substr($text, 0, $length); // cut string to proper length
+			if (mb_strrpos($text, ' ')) { // if we have spaces in text, cut to the last word, not letter
+				$text = mb_substr($text, 0, mb_strrpos($text, ' ')); 
+			}
 		}
 		return $before.$text.$after;
 	}
