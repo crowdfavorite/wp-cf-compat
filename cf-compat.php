@@ -893,6 +893,50 @@ function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4
 }
 
 /**
+ * Since our friends on the WordPress core team thought that this function was too dangerous for us 
+ * poor developers to use, it is included here so we can use it.
+ *
+ * @param string $start 
+ * @param string $num 
+ * @return array
+ */
+function cf_get_blog_list( $start = 0, $num = 10 ) {
+	global $wpdb;
+
+	$blogs = get_site_option( "blog_list" );
+	$update = false;
+	if ( is_array( $blogs ) ) {
+		if ( ( $blogs['time'] + 60 ) < time() ) { // cache for 60 seconds.
+			$update = true;
+		}
+	} else {
+		$update = true;
+	}
+
+	if ( $update == true ) {
+		unset( $blogs );
+		$blogs = $wpdb->get_results( $wpdb->prepare("SELECT blog_id, domain, path FROM $wpdb->blogs WHERE site_id = %d AND public = '1' AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' ORDER BY registered DESC", $wpdb->siteid), ARRAY_A );
+
+		foreach ( (array) $blogs as $details ) {
+			$blog_list[ $details['blog_id'] ] = $details;
+			$blog_list[ $details['blog_id'] ]['postcount'] = $wpdb->get_var( "SELECT COUNT(ID) FROM " . $wpdb->base_prefix . $details['blog_id'] . "_posts WHERE post_status='publish' AND post_type='post'" );
+		}
+		unset( $blogs );
+		$blogs = $blog_list;
+		update_site_option( "blog_list", $blogs );
+	}
+
+	if ( false == is_array( $blogs ) )
+		return array();
+
+	if ( $num == 'all' )
+		return array_slice( $blogs, $start, count( $blogs ) );
+	else
+		return array_slice( $blogs, $start, $num );
+}
+
+
+/**
  * cf_tiny_mce - This function inserts TinyMCE JS code into the page so we can convert textareas into TinyMCE editing areas.  For this to work, the action listed
  * in the "action to add" section below needs to be added to the plugin being written.  Also, the textarea needs to have a class of "cf_tiny_mce" for the TinyMCE
  * JS to be added.
