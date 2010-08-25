@@ -2,6 +2,7 @@
 
 ## 1.5.2.2 (trunk)
 - Make the `cf_trim_text` multi-byte aware. 
+- Added cf_get_blog_list since it was deprecated in WP core
 
 ## 1.5.2.1
 - made the check for async-upload more robust as well as more loosely coupled to specific server types.
