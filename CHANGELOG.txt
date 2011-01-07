@@ -1,6 +1,11 @@
 # CF Compat Change Log
 
-## 1.5.2.2 (trunk)
+## 1.5.3
+
+- Added shortcode for CF Copyright Date
+- Added returning function for CF Copyright Date
+
+## 1.5.2.2
 - Make the `cf_trim_text` multi-byte aware. 
 - Added cf_get_blog_list since it was deprecated in WP core
 

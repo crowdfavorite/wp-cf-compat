@@ -3,7 +3,7 @@
 Plugin Name: CF Compatability
 Plugin URI: http://crowdfavorite.com
 Description:  General compatability functions compiled by Crowd Favorite
-Version: 1.5.2.2
+Version: 1.5.3
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */
@@ -453,16 +453,42 @@ if(!function_exists('cf_json_encode')) {
 }
 
 /**
- * Shows a date range - for auto-updateing the copyright date in a site footer.
+ * Returns a date range - for auto-updating the copyright date in a site footer.
+ */
+if (!function_exists('cf_get_copyright_date')) {
+	function cf_get_copyright_date($year = 0) {
+		$output = '';
+		if ($year == 0) {
+			$output = date('Y');
+		}
+		else {
+			$output = $year;
+			if (date('Y') > $year) {
+				$output .= '-'.date('Y');
+			}
+		}
+		return $output;
+	}
+}
+
+/**
+ * Echoes a date range - for auto-updating the copyright date in a site footer.
  */
 if (!function_exists('cf_copyright_date')) {
-	function cf_copyright_date($year) {
-		$output = $year;
-		if (date('Y') > $year) {
-			$output .= '-'.date('Y');
-		}
-		print($output);
+	function cf_copyright_date($year = 0) {
+		echo cf_get_copyright_date($year);
 	}
+}
+
+/**
+ * Shortcode for displaying a date range - for auto-updating the copyright date in a site footer.
+ */
+if (!function_exists('cf_copyright_date_shortcode')) {
+	function cf_copyright_date_shortcode($atts) {
+		$atts = extract(shortcode_atts(array('year' => 0),$atts));
+		return cf_get_copyright_date($year);
+	}
+	add_shortcode('cf_copyright_date','cf_copyright_date_shortcode');
 }
 
 /**
