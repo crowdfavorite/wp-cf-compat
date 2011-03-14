@@ -874,11 +874,13 @@ function cf_count_plural($num) {
  * @param string $post - default 'ago' - what to put after the time output
  * @param int $full_date_cutoff - default 4, how old a date should be until it gets formatted as a date string
  * @param string $format - format for date output past 4 weeks
+ * @param string $pre_format - default '' - what to put before the date out past 4 weeks
  * @return string
  */
-function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4,$format='F j, Y') {
+function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4,$format='F j, Y',$pre_format) {
 	$pre .= ' ';
 	$post = ' '.$post;
+	$pre_format = ' ';
 
 	if(!is_numeric($date)) { 
 		$date = strtotime($date); 
@@ -915,7 +917,7 @@ function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4
 	}
 
 	// actual date string if farther than 4 weeks ago
-	return 'on ' . mysql2date($format, date('Y-m-d H:i:s', $date));
+	return $pre_format . mysql2date($format, date('Y-m-d H:i:s', $date));
 }
 
 /**
