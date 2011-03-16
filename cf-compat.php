@@ -855,16 +855,6 @@ function cf_export_options_list() {
 }
 
 /**
- * Simple pluralizer for the date entry of cf_relative_time_ago
- *
- * @param int $num 
- * @return string
- */
-function cf_count_plural($num) {
-	return $num != 1 ? 's' : null;
-}
-
-/**
  * Build simple relative dates
  * Doesn't go too deep in to specificity as that is rarely needed
  *
@@ -889,31 +879,41 @@ function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4
 	// seconds
 	$diff = time()-$date;
 	if ($diff < 60){ 
-		return $pre.$diff.' second'.cf_count_plural($diff).$post; 
+		$singular_string = sprintf('%1$s%2$s second%3$s', $pre, '%d', $post);
+		$plural_string = sprintf('%1$s%2$s seconds%3$s', $pre, '%d', $post);
+		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
 	}
 	
 	// minutes
 	$diff = round($diff/60);
 	if ($diff < 60) { 
-		return $pre.$diff.' minute'.cf_count_plural($diff).$post; 
+		$singular_string = sprintf('%1$s%2$s minute%3$s', $pre, '%d', $post);
+		$plural_string = sprintf('%1$s%2$s minutes%3$s', $pre, '%d', $post);
+		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
 	}
 	
 	// hours
 	$diff = round($diff/60);
 	if ($diff < 24) { 
-		return $pre.$diff.' hour'.cf_count_plural($diff).$post; 
+		$singular_string = sprintf('%1$s%2$s hour%3$s', $pre, '%d', $post);
+		$plural_string = sprintf('%1$s%2$s hours%3$s', $pre, '%d', $post);
+		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
 	}
 	
 	// days
 	$diff = round($diff/24);
 	if ($diff < 7) { 
-		return $pre.$diff.' day'.cf_count_plural($diff).$post; 
+		$singular_string = sprintf('%1$s%2$s day%3$s', $pre, '%d', $post);
+		$plural_string = sprintf('%1$s%2$s days%3$s', $pre, '%d', $post);
+		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
 	}
 	
 	// weeks
 	$diff = round($diff/7);
 	if ($diff <= $full_date_cutoff) { 
-		return $pre.$diff.' week'.cf_count_plural($diff).$post; 
+		$singular_string = sprintf('%1$s%2$s week%3$s', $pre, '%d', $post);
+		$plural_string = sprintf('%1$s%2$s weeks%3$s', $pre, '%d', $post);
+		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
 	}
 
 	// actual date string if farther than 4 weeks ago
