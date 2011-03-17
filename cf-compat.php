@@ -879,41 +879,36 @@ function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4
 	// seconds
 	$diff = time()-$date;
 	if ($diff < 60){ 
-		$singular_string = sprintf('%1$s%2$s second%3$s', $pre, '%d', $post);
-		$plural_string = sprintf('%1$s%2$s seconds%3$s', $pre, '%d', $post);
-		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
+		return sprintf('%1$s%2$s%3$s', $pre, sprintf(
+			_n('%d second', '%d seconds', $diff), $diff), $post);
 	}
 	
 	// minutes
 	$diff = round($diff/60);
 	if ($diff < 60) { 
-		$singular_string = sprintf('%1$s%2$s minute%3$s', $pre, '%d', $post);
-		$plural_string = sprintf('%1$s%2$s minutes%3$s', $pre, '%d', $post);
-		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
+		return sprintf('%1$s%2$s%3$s', $pre, sprintf(
+			_n('%d minute', '%d minutes', $diff), $diff), $post);
 	}
 	
 	// hours
 	$diff = round($diff/60);
-	if ($diff < 24) { 
-		$singular_string = sprintf('%1$s%2$s hour%3$s', $pre, '%d', $post);
-		$plural_string = sprintf('%1$s%2$s hours%3$s', $pre, '%d', $post);
-		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
+	if ($diff < 24) {
+		return sprintf('%1$s%2$s%3$s', $pre, sprintf(
+			_n('%d hour', '%d hours', $diff), $diff), $post);
 	}
 	
 	// days
 	$diff = round($diff/24);
 	if ($diff < 7) { 
-		$singular_string = sprintf('%1$s%2$s day%3$s', $pre, '%d', $post);
-		$plural_string = sprintf('%1$s%2$s days%3$s', $pre, '%d', $post);
-		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
+		return sprintf('%1$s%2$s%3$s', $pre, sprintf(
+			_n('%d day', '%d days', $diff), $diff), $post);
 	}
 	
 	// weeks
 	$diff = round($diff/7);
 	if ($diff <= $full_date_cutoff) { 
-		$singular_string = sprintf('%1$s%2$s week%3$s', $pre, '%d', $post);
-		$plural_string = sprintf('%1$s%2$s weeks%3$s', $pre, '%d', $post);
-		return sprintf(_n($singular_string, $plural_string, $diff), $diff);
+		return sprintf('%1$s%2$s%3$s', $pre, sprintf(
+			_n('%d week', '%d weeks', $diff), $diff), $post);
 	}
 
 	// actual date string if farther than 4 weeks ago
