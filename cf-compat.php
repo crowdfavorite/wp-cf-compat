@@ -614,7 +614,7 @@ function cf_menu_items() {
 		add_management_page(
 			__('CF Site Options'),
 			__('CF Site Options'),
-			10,
+			'manage_options',
 			basename(__FILE__),
 			'cf_site_options'
 		);
