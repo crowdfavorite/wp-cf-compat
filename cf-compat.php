@@ -323,8 +323,9 @@ function cf_non_admin_redirect($capability = 'edit_posts') {
 	$below_threshold = (is_admin() && !current_user_can($capability));
 	$below_threshold = apply_filters('cf_non_admin_threshold', $below_threshold);
 	// if the user has the right capabilities, or this is the flash uploader,
+	// or the admin ajax handler (required for some plugins like woocommerce),
 	// let it thorugh
-	if (!$below_threshold || basename($_SERVER['SCRIPT_NAME']) == 'async-upload.php') {
+	if (!$below_threshold || in_array(basename($_SERVER['SCRIPT_NAME']), array('async-upload.php', 'admin-ajax.php'))) {
 		return true;
 	}
 	else {
