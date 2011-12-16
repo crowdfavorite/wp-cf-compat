@@ -612,8 +612,8 @@ if(defined('CF_QUERY_DEBUG') && CF_QUERY_DEBUG) {
 function cf_menu_items() {
 	if (current_user_can('manage_options')) {
 		add_management_page(
-			__('CF Site Options'),
-			__('CF Site Options'),
+			__('CF Site Options', 'cf-compat'),
+			__('CF Site Options', 'cf-compat'),
 			'manage_options',
 			basename(__FILE__),
 			'cf_site_options'
