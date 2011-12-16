@@ -179,6 +179,8 @@ function cf_call_func_shortcode($atts) {
 	$atts = extract(shortcode_atts(array('type'=>'bloginfo','param'=>'url'),$atts));
 	$functions_allowed = array(
 							'get_bloginfo',
+							'site_url',
+							'home_url',
 							'bloginfo',
 							'my_test_func',
 							'get_permalink',
@@ -333,7 +335,7 @@ function cf_non_admin_redirect($capability = 'edit_posts') {
 		//to specific pages
 		if (!in_array($requested_page, apply_filters('cf_non_admin_allowed_pages', array()))) {
 			/* Adding filter of where to dump users upon redirect */
-			wp_redirect(apply_filters('cf_non_admin_redirect_to', get_bloginfo('url')));
+			wp_redirect(apply_filters('cf_non_admin_redirect_to', home_url()));
 			exit;
 		}
 	}
@@ -626,10 +628,10 @@ function cf_request_handler() {
 	if (current_user_can('manage_options')) {
 		$blogurl = '';
 		if (is_ssl()) {
-			$blogurl = str_replace('http://','https://',get_bloginfo('wpurl'));
+			$blogurl = str_replace('http://','https://',site_url());
 		}
 		else {
-			$blogurl = get_bloginfo('wpurl');
+			$blogurl = site_url();
 		}				
 		if (isset($_POST['cf_action']) && $_POST['cf_action'] != '') {
 			switch ($_POST['cf_action']) {
@@ -680,10 +682,10 @@ add_action('admin_head','cf_site_options_head');
 function cf_site_options_nav($page = '') {
 	$blogurl = '';
 	if (is_ssl()) {
-		$blogurl = str_replace('http://','https://',get_bloginfo('wpurl'));
+		$blogurl = str_replace('http://','https://', site_url());
 	}
 	else {
-		$blogurl = get_bloginfo('wpurl');
+		$blogurl = site_url();
 	}		
 	
 	switch ($page) {
@@ -725,8 +727,9 @@ function cf_site_options() {
 	screen_icon();
 	print('
 		<h2>CF Import/Export Site Options</h2>
-		'.cf_site_options_nav($page));
+		');
 		if (isset($page)) {
+			print(cf_site_options_nav($page));
 			switch ($page) {
 				case 'import':
 					cf_import_options();
