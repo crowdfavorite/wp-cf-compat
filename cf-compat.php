@@ -870,7 +870,7 @@ function cf_export_options_list() {
  * @param string $pre_format - default '' - what to put before the date out past 4 weeks
  * @return string
  */
-function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4,$format='F j, Y',$pre_format, $gmt = false) {
+function cf_relative_time_ago($date,$pre='about',$post='ago',$full_date_cutoff=4,$format='F j, Y',$pre_format='', $gmt = false) {
 	$pre .= ' ';
 	$post = ' '.$post;
 	$pre_format = ' ';
