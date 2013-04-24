@@ -1,5 +1,8 @@
 # CF Compat Change Log
 
+## in-dev
+- Fixed default value on cf_relative_time_ago pre_format argument.
+
 ## 1.5.3
 
 - Added shortcode for CF Copyright Date
